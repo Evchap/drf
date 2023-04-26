@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # own
     'women.apps.WomenConfig',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
