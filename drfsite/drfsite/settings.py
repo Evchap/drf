@@ -124,3 +124,11 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+REST_FRAMEWORK = { # чтобы в браузере отключить браузерное API - выведение запросов на экран
+    'DEFAULT_RENDERER_CLASSES': [ # определяем класс рендера
+        'rest_framework.renderers.JSONRenderer', # JSONRenderer - обмен происходит в JSON-формате
+        'rest_framework.renderers.BrowsableAPIRenderer', # если закомментировать эту строку, то
+                                                        # и будет изменяться вид окна браузера
+    ]
+}
