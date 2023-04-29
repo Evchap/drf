@@ -131,5 +131,10 @@ REST_FRAMEWORK = { # чтобы в браузере отключить брау�
         'rest_framework.renderers.JSONRenderer', # JSONRenderer - обмен происходит в JSON-формате
         'rest_framework.renderers.BrowsableAPIRenderer', # если закомментировать эту строку, то
                                                         # и будет изменяться вид окна браузера
+    ],
+
+    'DEFAULT_PERMISSION_CLASSES': [ # ограничение доступа к данным
+        'rest_framework.permissions.IsAuthenticated', # IsAuthenticated - доступ только авторизованным пользователям
+        # 'rest_framework.permissions.AllowAny', # AllowAny - если нужен доступ лоя всех
     ]
 }
