@@ -10,7 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+from datetime import timedelta
 from pathlib import Path
+
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -140,9 +143,53 @@ REST_FRAMEWORK = {
 
     ],
 
-    'DEFAULT_AUTHENTICATION_CLASSES': [ # разрешаем аутентификацию по токенам самого фреймворка
-        'rest_framework.authentication.TokenAuthentication', # разрешаем аутентификацию по токенам
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        # 'rest_framework.authentication.TokenAuthentication', # разрешаем аутентификацию по токенам
+        'rest_framework_simplejwt.authentication.JWTAuthentication', # разрешаем аутентификацию по JWT токенам
         'rest_framework.authentication.BasicAuthentication', # разрешаем аутентификацию по сессиям
         'rest_framework.authentication.SessionAuthentication', # разрешаем аутентификацию по сессиям
     ]
+}
+
+
+SIMPLE_JWT = { # настройки словаря для аутентификации по JWT токенам
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5), # время жизни access_token
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1), # интервал времени обновления refresh_token
+    "ROTATE_REFRESH_TOKENS": False,
+    "BLACKLIST_AFTER_ROTATION": False,
+    "UPDATE_LAST_LOGIN": False,
+
+    "ALGORITHM": "HS256", # алгоритм шифрования для формирования подписи (HS256)
+    # "SIGNING_KEY": settings.SECRET_KEY,
+    "SIGNING_KEY": SECRET_KEY, # секретный ключ, который берется от Django
+    "VERIFYING_KEY": "",
+    "AUDIENCE": None,
+    "ISSUER": None,
+    "JSON_ENCODER": None,
+    "JWK_URL": None,
+    "LEEWAY": 0,
+
+    "AUTH_HEADER_TYPES": ("Bearer",), # определяют заголовок перед токеном в заголовке запроса,
+    # поле, в котором будет передаваться токен # это слово Bearer пишется при get запросе перед токеном
+    "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
+    "USER_ID_FIELD": "id", # идентификатор пользователя определяется ключом user_id.
+    "USER_ID_CLAIM": "user_id", # внутри токена user_id соответствует идентификатору пользователя
+    "USER_AUTHENTICATION_RULE": "rest_framework_simplejwt.authentication.default_user_authentication_rule",
+
+    "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
+    "TOKEN_TYPE_CLAIM": "token_type",
+    "TOKEN_USER_CLASS": "rest_framework_simplejwt.models.TokenUser",
+
+    "JTI_CLAIM": "jti",
+    # Следующие 3 ключа настраивают параметры для sliding-токенов. Это еще одна идея использования JWT-токенов
+    "SLIDING_TOKEN_REFRESH_EXP_CLAIM": "refresh_exp", #
+    "SLIDING_TOKEN_LIFETIME": timedelta(minutes=5), #
+    "SLIDING_TOKEN_REFRESH_LIFETIME": timedelta(days=1), #
+
+    "TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.TokenObtainPairSerializer",
+    "TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSerializer",
+    "TOKEN_VERIFY_SERIALIZER": "rest_framework_simplejwt.serializers.TokenVerifySerializer",
+    "TOKEN_BLACKLIST_SERIALIZER": "rest_framework_simplejwt.serializers.TokenBlacklistSerializer",
+    "SLIDING_TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.TokenObtainSlidingSerializer",
+    "SLIDING_TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSlidingSerializer",
 }

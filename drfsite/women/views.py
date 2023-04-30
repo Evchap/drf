@@ -21,7 +21,7 @@ class WomenAPIList(generics.ListCreateAPIView):
     # permission_classes = (IsAuthenticatedOrReadOnly,)
     permission_classes = (IsAuthenticated,) # разрешим получать доступ к отдельной записи
                                             # только авторизованным пользователям:
-    authentication_classes = (TokenAuthentication,) #  данные по записи можно получать
+    # authentication_classes = (TokenAuthentication,) #  данные по записи можно получать
                                                         # только при авторизации только по токенам
 class WomenAPIUpdate(generics.RetrieveUpdateAPIView):
     queryset = Women.objects.all()
