@@ -40,6 +40,9 @@ INSTALLED_APPS = [
     # own
     'women.apps.WomenConfig',
     'rest_framework',
+    'rest_framework.authtoken',
+    'djoser',
+
 ]
 
 MIDDLEWARE = [
@@ -125,16 +128,21 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-REST_FRAMEWORK = { # чтобы в браузере отключить браузерное API - выведение запросов на экран
-    'DEFAULT_RENDERER_CLASSES': # определяем класс рендера
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': #
         [
-        'rest_framework.renderers.JSONRenderer', # JSONRenderer - обмен происходит в JSON-формате
-        'rest_framework.renderers.BrowsableAPIRenderer', # если закомментировать эту строку, то
-                                                        # и будет изменяться вид окна браузера
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
     ],
 
-    'DEFAULT_PERMISSION_CLASSES': [ # ограничение доступа к данным
-        'rest_framework.permissions.IsAuthenticated', # IsAuthenticated - доступ только авторизованным пользователям
-        # 'rest_framework.permissions.AllowAny', # AllowAny - если нужен доступ лоя всех
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+
+    ],
+
+    'DEFAULT_AUTHENTICATION_CLASSES': [ # разрешаем аутентификацию по токенам самого фреймворка
+        'rest_framework.authentication.TokenAuthentication', # разрешаем аутентификацию по токенам
+        'rest_framework.authentication.BasicAuthentication', # разрешаем аутентификацию по сессиям
+        'rest_framework.authentication.SessionAuthentication', # разрешаем аутентификацию по сессиям
     ]
 }

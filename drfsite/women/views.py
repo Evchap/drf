@@ -1,8 +1,9 @@
 from django.forms import model_to_dict
 from django.shortcuts import render
 from rest_framework import generics, mixins  # , request
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import api_view, action
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser, IsAuthenticated
 
 from .models import Women, Category
 from .permissions import IsAdminOrReadOnly, IsOwnerOrReadOnly
@@ -13,21 +14,22 @@ from rest_framework.views import APIView
 
 from rest_framework import viewsets
 
-# задаем 3 класса обычных представлений
-class WomenAPIList(generics.ListCreateAPIView): # класс отдает список записей из таблицы women и позволяет создать новую запись
+
+class WomenAPIList(generics.ListCreateAPIView):
     queryset = Women.objects.all()
     serializer_class = WomenSerializer
-    permission_classes = (IsAuthenticatedOrReadOnly,)
-
-class WomenAPIUpdate(generics.RetrieveUpdateAPIView): #  – меняет выбранную запись только автор,
-                                                    # а просматривать могут все пользователи
+    # permission_classes = (IsAuthenticatedOrReadOnly,)
+    permission_classes = (IsAuthenticated,) # разрешим получать доступ к отдельной записи
+                                            # только авторизованным пользователям:
+    authentication_classes = (TokenAuthentication,) #  данные по записи можно получать
+                                                        # только при авторизации только по токенам
+class WomenAPIUpdate(generics.RetrieveUpdateAPIView):
     queryset = Women.objects.all()
     serializer_class = WomenSerializer
-    permission_classes = (IsOwnerOrReadOnly,) # сделаем так, чтобы добавлять записи могли только
-                                                        # авторизованные пользователи.
+    permission_classes = (IsOwnerOrReadOnly,)
 
 
-class WomenAPIDestroy(generics.RetrieveDestroyAPIView): # – удаляет выбранную запись
+class WomenAPIDestroy(generics.RetrieveDestroyAPIView):
     queryset = Women.objects.all()
     serializer_class = WomenSerializer
-    permission_classes = (IsAdminOrReadOnly,) # если, предположим, удалять может только администратор
+    permission_classes = (IsAdminOrReadOnly,)
