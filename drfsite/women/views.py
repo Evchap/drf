@@ -17,7 +17,7 @@ from rest_framework import viewsets
 class WomenAPIList(generics.ListCreateAPIView): # класс отдает список записей из таблицы women и позволяет создать новую запись
     queryset = Women.objects.all()
     serializer_class = WomenSerializer
-    # permission_classes = (IsAuthenticatedOrReadOnly,)
+    permission_classes = (IsAuthenticatedOrReadOnly,)
 
 class WomenAPIUpdate(generics.RetrieveUpdateAPIView): #  – меняет выбранную запись только автор,
                                                     # а просматривать могут все пользователи

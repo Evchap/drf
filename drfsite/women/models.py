@@ -12,10 +12,7 @@ class Women(models.Model):
     is_published = models.BooleanField(default=True)
     cat = models.ForeignKey('Category', on_delete=models.PROTECT, null=True)
     user = models.ForeignKey(User, verbose_name='Пользователь', on_delete=models.CASCADE)
-    # последняя строка - идентификатор пользователя, который добавил запись
-    # User - модель, где хранятся все пользователи по умолчанию
-    # on_delete = models.CASCADE - при удалении пользователя, удаляются все записи из таблицы Women
-    # т.к. модель изменилась, выполним миграции
+
 
     def __str__(self):
         return self.title
